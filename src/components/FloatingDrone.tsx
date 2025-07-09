@@ -26,7 +26,7 @@ const FloatingDrone = () => {
       <div className="relative animate-float">
         <div className="w-16 h-16 bg-primary/20 rounded-full animate-pulse flex items-center justify-center backdrop-blur-sm border border-primary/30">
           <div className="text-2xl animate-bounce">
-            🚁
+            🛸
           </div>
         </div>
         <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
