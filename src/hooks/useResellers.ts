@@ -92,7 +92,23 @@ export const useResellers = () => {
 
   const updateReseller = async (id: number, updates: Partial<Reseller>) => {
     try {
-      const updateData: any = { ...updates };
+      // Interface para dados de atualização do Supabase
+      interface SupabaseUpdateData {
+        name?: string;
+        address?: string;
+        phone?: string;
+        email?: string;
+        position_lat?: number;
+        position_lng?: number;
+        type?: string;
+        website?: string;
+        description?: string;
+        photo?: string;
+        coverageRadius?: number;
+        showCoverage?: boolean;
+      }
+      
+      const updateData: SupabaseUpdateData = { ...updates };
       
       // Transform position if provided
       if (updates.position) {
@@ -154,4 +170,4 @@ export const useResellers = () => {
     updateReseller,
     deleteReseller,
   };
-}; 
+};
