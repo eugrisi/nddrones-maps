@@ -4,7 +4,7 @@
 
 ### ✅ Implementado
 - [x] Mapa interativo com Leaflet
-- [x] Integração com Supabase
+- [x] Integração com MySQL
 - [x] Geolocalização do usuário
 - [x] Modo satélite/mapa
 - [x] Filtros avançados
@@ -129,9 +129,9 @@
 - **PWA** para instalação nativa
 
 ### Backend
-- **Supabase** como BaaS
+- **MySQL** como banco de dados
 - **Node.js** com Express
-- **PostgreSQL** para dados
+- **MySQL2** para conexão
 - **Redis** para cache
 
 ### DevOps
@@ -193,4 +193,4 @@
 
 ---
 
-*Este roadmap é dinâmico e pode ser atualizado conforme as necessidades do negócio e feedback dos usuários.* 
+*Este roadmap é dinâmico e pode ser atualizado conforme as necessidades do negócio e feedback dos usuários.*
