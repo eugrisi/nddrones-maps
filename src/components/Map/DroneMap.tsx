@@ -158,20 +158,20 @@ const DroneMap = ({ resellers, center, zoom, darkMode = false, mapType = 'tradit
             icon={createDroneIcon(reseller.type === 'Sede Principal')}
           >
             <Popup closeButton={false} autoPan={true} className="custom-popup">
-              <div className="w-[380px] bg-white rounded-[10px] shadow-[0_2px_8px_rgba(0,0,0,0.1)] p-4 text-sm text-gray-800 font-sans">
+              <div className="w-[280px] sm:w-[380px] bg-white rounded-[10px] shadow-[0_2px_8px_rgba(0,0,0,0.1)] p-3 sm:p-4 text-xs sm:text-sm text-gray-800 font-sans">
                 {/* Título */}
-                <h3 className="m-0 mb-1 text-base font-semibold">
+                <h3 className="m-0 mb-1 text-sm sm:text-base font-semibold">
                   {reseller.name}
                 </h3>
-                <span className="inline-block bg-orange-50 text-orange-600 text-xs px-1.5 py-0.5 rounded mb-3">
+                <span className="inline-block bg-orange-50 text-orange-600 text-xs px-1.5 py-0.5 rounded mb-2 sm:mb-3">
                   Unidade Regional
                 </span>
                 
                 {/* Lista de informações */}
-                <div className="flex flex-col gap-2.5">
+                <div className="flex flex-col gap-2 sm:gap-2.5">
                   {/* Endereço */}
                   <div className="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-[18px] h-[18px] text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-gray-500 flex-shrink-0">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5s-3 1.343-3 3 1.343 3 3 3z"/>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 22s8-6 8-12a8 8 0 10-16 0c0 6 8 12 8 12z"/>
                     </svg>
@@ -180,7 +180,7 @@ const DroneMap = ({ resellers, center, zoom, darkMode = false, mapType = 'tradit
                   
                   {/* Telefone */}
                   <div className="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-[18px] h-[18px] text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-gray-500 flex-shrink-0">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.518 4.553a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.553 1.518A1 1 0 0121 18.72V22a2 2 0 01-2 2h-1C9.163 24 0 14.837 0 3a2 2 0 012-2h1z"/>
                     </svg>
                     <span>{reseller.phone}</span>
@@ -197,7 +197,7 @@ const DroneMap = ({ resellers, center, zoom, darkMode = false, mapType = 'tradit
                   {/* Raio */}
                   {reseller.coverageRadius && (
                     <div className="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-[18px] h-[18px] text-gray-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-gray-500 flex-shrink-0">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4"/>
                       </svg>
                       <span>Raio: {reseller.serviceRadius} km</span>
@@ -207,7 +207,7 @@ const DroneMap = ({ resellers, center, zoom, darkMode = false, mapType = 'tradit
                   {/* Cidades */}
                   {reseller.coveredCities && reseller.coveredCities.length > 0 && (
                     <div className="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-[18px] h-[18px] text-gray-500">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-gray-500 flex-shrink-0">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
                       </svg>
                       <span>{reseller.serviceCities?.join(', ') || 'Não informado'}</span>
@@ -216,16 +216,16 @@ const DroneMap = ({ resellers, center, zoom, darkMode = false, mapType = 'tradit
                 </div>
                 
                 {/* Botões */}
-                <div className="flex justify-between gap-2 mt-4">
+                <div className="flex justify-between gap-1.5 sm:gap-2 mt-3 sm:mt-4">
                   <button
                     onClick={() => window.open(`tel:${reseller.phone}`)}
-                    className="flex-1 bg-[#2563eb] text-white border-none py-2.5 px-4 rounded-md cursor-pointer hover:bg-blue-700 transition-colors"
+                    className="flex-1 bg-[#2563eb] text-white border-none py-2 sm:py-2.5 px-2 sm:px-4 rounded-md cursor-pointer hover:bg-blue-700 transition-colors text-xs sm:text-sm"
                   >
                     Ligar
                   </button>
                   <button
                     onClick={() => window.open(`https://wa.me/${reseller.phone?.replace(/\D/g, '')}`)}
-                    className="flex-1 bg-[#22c55e] text-white border-none py-2.5 px-4 rounded-md cursor-pointer hover:bg-green-700 transition-colors"
+                    className="flex-1 bg-[#22c55e] text-white border-none py-2 sm:py-2.5 px-2 sm:px-4 rounded-md cursor-pointer hover:bg-green-700 transition-colors text-xs sm:text-sm"
                   >
                     WhatsApp
                   </button>

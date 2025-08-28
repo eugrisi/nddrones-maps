@@ -20,7 +20,7 @@ import AdminSettings from '@/components/AdminSettings';
 
 // Customização visual (mock local)
 const defaultCustom = {
-  logo: '/nd-logo.svg',
+  logo: '/src/pages/logo-h-05.svg',
   homeTitle: 'Localizador de Unidades',
   homeSubtitle: 'Encontre nossa unidade mais próxima',
   btnBuscar: 'Buscar Unidades',

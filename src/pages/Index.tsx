@@ -4,6 +4,7 @@ import NotificationToast from '@/components/NotificationToast';
 import { useResellers } from '@/hooks/useResellers';
 import { useNotifications } from '@/hooks/useNotifications';
 import { useMapControl } from '@/hooks/useMapControl';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Reseller } from '@/data/mockData';
 import L from 'leaflet';
 
@@ -23,11 +24,12 @@ const defaultCustom = {
 };
 
 const Index = () => {
+  const isMobile = useIsMobile();
   const [selectedEstado, setSelectedEstado] = useState('');
   const [selectedCidade, setSelectedCidade] = useState('');
   const [selectedReseller, setSelectedReseller] = useState<Reseller | null>(null);
   const [suggestion, setSuggestion] = useState<Reseller | null>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [darkMode, setDarkMode] = useState(false);
   const [animateUnits, setAnimateUnits] = useState(false);
   const [mapType, setMapType] = useState<'traditional' | 'satellite'>('traditional');
@@ -68,6 +70,13 @@ const Index = () => {
     const saved = localStorage.getItem('nddrones_custom');
     return saved ? JSON.parse(saved) : defaultCustom;
   });
+
+  // Garantir que a sidebar seja recolhida em dispositivos móveis
+  useEffect(() => {
+    if (isMobile && sidebarOpen) {
+      setSidebarOpen(false);
+    }
+  }, [isMobile]);
 
   // Carregar estado dos círculos de cobertura
   useEffect(() => {
@@ -283,26 +292,26 @@ const Index = () => {
             </button>
             
             {/* Dropdown da lista de unidades */}
-            <div className={`absolute right-0 top-full mt-2 w-72 md:w-80 rounded-lg shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 ${
+            <div className={`absolute right-0 top-full mt-2 w-64 sm:w-72 md:w-80 rounded-lg shadow-xl border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 ${
               darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
             }`}>
-              <div className="p-3">
-                <h3 className={`font-semibold mb-3 text-base ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>
+              <div className="p-3 sm:p-4">
+                <h3 className={`font-semibold mb-2 sm:mb-3 text-sm sm:text-base ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>
                   Unidades Disponíveis
                 </h3>
-                <div className="space-y-2 max-h-60 overflow-y-auto">
+                <div className="space-y-2 sm:space-y-3 max-h-60 overflow-y-auto">
                   {resellers.map((reseller) => (
                     <button
                       key={reseller.id}
                       onClick={() => handleSelectReseller(reseller)}
-                      className={`w-full text-left p-3 rounded-lg transition-colors hover:bg-nd-orange hover:text-white ${
+                      className={`w-full text-left p-3 sm:p-4 rounded-lg transition-colors hover:bg-nd-orange hover:text-white ${
                         darkMode ? 'text-gray-200 hover:bg-nd-orange' : 'text-gray-700 hover:bg-nd-orange'
                       }`}
                     >
-                      <div className="font-medium text-base">{reseller.name}</div>
-                      <div className="text-sm opacity-75 mt-1">{reseller.address}</div>
+                      <div className="font-medium text-sm sm:text-base">{reseller.name}</div>
+                      <div className="text-xs sm:text-sm opacity-75 mt-1 sm:mt-1.5">{reseller.address}</div>
                       {reseller.coverageRadius && (
-                        <div className="text-sm opacity-60 mt-1">
+                        <div className="text-xs sm:text-sm opacity-60 mt-1 sm:mt-1.5">
                           Cobertura: {reseller.coverageRadius}km
                           {reseller.coveredCities && ` • ${reseller.coveredCities.length} cidades`}
                         </div>
@@ -334,13 +343,13 @@ const Index = () => {
       </div>
 
       {/* Sidebar ND Drones - Responsiva para mobile */}
-      <aside className={`${sidebarOpen ? 'w-80 sm:w-72 md:w-80' : 'w-0'} ${darkMode ? 'bg-gray-800 text-gray-100' : 'bg-nd-green-dark text-nd-beige'} flex flex-col shadow-2xl transition-all duration-300 overflow-hidden print:hidden fixed md:relative z-50 h-full md:h-auto ${sidebarOpen ? 'md:relative' : ''}`}>
+      <aside className={`${sidebarOpen ? 'w-full sm:w-80 md:w-72 lg:w-80' : 'w-0'} ${darkMode ? 'bg-gray-800 text-gray-100' : 'bg-nd-green-dark text-nd-beige'} flex flex-col shadow-2xl transition-all duration-300 overflow-hidden print:hidden fixed md:relative z-50 h-full md:h-auto ${sidebarOpen ? 'md:relative' : ''}`}>
         {/* Logo Responsiva - Tamanhos específicos para diferentes resoluções */}
-        <div className={`p-3 sm:p-4 border-b ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'} flex items-center justify-center`}>
+        <div className={`p-2 sm:p-3 md:p-4 border-b ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'} flex items-center justify-center`}>
           <img 
-            src={custom.logo} 
+            src="/logo-h-05.svg" 
             alt="ND Drones" 
-            className="object-contain mx-auto transition-transform hover:scale-110 w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16"
+            className="object-contain mx-auto transition-transform hover:scale-110 w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 max-w-full max-h-full"
           />
         </div>
         
@@ -351,17 +360,17 @@ const Index = () => {
         </div>
 
         {/* Formulário de Busca */}
-        <div className={`p-4 space-y-4 border-b ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'}`}>
-          <div className="space-y-3">
+        <div className={`p-4 sm:p-5 space-y-3 sm:space-y-4 border-b ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'}`}>
+          <div className="space-y-2 sm:space-y-3">
             <div>
-              <label className="block font-semibold mb-1 text-sm">
-                <svg className="inline w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <label className="block font-semibold mb-1 text-xs sm:text-sm">
+                <svg className="inline w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                 </svg>
                 Estado
               </label>
               <select
-                className={`w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-nd-orange focus:border-transparent transition-all ${
+                className={`w-full border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-nd-orange focus:border-transparent transition-all ${
                   darkMode 
                     ? 'bg-gray-700 border-gray-600 text-gray-100' 
                     : 'bg-white/10 border-nd-green-light/30 text-white'
@@ -377,14 +386,14 @@ const Index = () => {
             </div>
 
             <div>
-              <label className="block font-semibold mb-1 text-sm">
-                <svg className="inline w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <label className="block font-semibold mb-1 text-xs sm:text-sm">
+                <svg className="inline w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V4z" clipRule="evenodd" />
                 </svg>
                 Cidade
               </label>
               <select
-                className={`w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-nd-orange focus:border-transparent transition-all disabled:opacity-50 ${
+                className={`w-full border rounded-md px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-nd-orange focus:border-transparent transition-all disabled:opacity-50 ${
                   darkMode 
                     ? 'bg-gray-700 border-gray-600 text-gray-100' 
                     : 'bg-white/10 border-nd-green-light/30 text-white'
@@ -400,26 +409,26 @@ const Index = () => {
               </select>
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
               <button
-                className="bg-nd-orange hover:bg-orange-500 text-white font-bold py-3 px-4 rounded-lg text-sm transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-nd-orange shadow-lg hover:shadow-xl"
+                className="bg-nd-orange hover:bg-orange-500 text-white font-bold py-2 sm:py-3 px-2 sm:px-4 rounded-lg text-xs sm:text-sm transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-nd-orange shadow-lg hover:shadow-xl"
                 onClick={handleBuscar}
               >
-                <svg className="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="inline w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 Buscar
               </button>
 
               <button
-                className={`font-bold py-3 px-4 rounded-lg text-sm transition-all transform hover:scale-105 focus:outline-none focus:ring-2 shadow-lg hover:shadow-xl ${
+                className={`font-bold py-2 sm:py-3 px-2 sm:px-4 rounded-lg text-xs sm:text-sm transition-all transform hover:scale-105 focus:outline-none focus:ring-2 shadow-lg hover:shadow-xl ${
                   darkMode 
                     ? 'bg-gray-600 hover:bg-gray-500 text-white focus:ring-gray-600' 
                     : 'bg-nd-green-dark hover:bg-green-700 text-white focus:ring-nd-green-dark'
                 }`}
                 onClick={handleVerTodas}
               >
-                <svg className="inline w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="inline w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Todas
@@ -430,14 +439,14 @@ const Index = () => {
 
         {/* Informações de Cobertura do Estado */}
         {selectedEstado && (
-          <div className={`p-3 border-t ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'}`}>
-            <h4 className="font-semibold text-sm mb-2 flex items-center">
-              <svg className="inline w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+          <div className={`p-3 sm:p-4 border-t ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'}`}>
+            <h4 className="font-semibold text-xs sm:text-sm mb-1.5 sm:mb-2 flex items-center">
+              <svg className="inline w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
                 </svg>
               Cobertura em {selectedEstado}
               </h4>
-            <div className="text-sm space-y-1">
+            <div className="text-xs sm:text-sm space-y-1">
               <div className="flex justify-between">
                 <span className="opacity-70">Unidades no Estado:</span>
                 <span className="font-semibold">
@@ -451,17 +460,17 @@ const Index = () => {
                 </span>
               </div>
               {cidadesDisponiveis.length === 0 && (
-                <div className="mt-2 text-xs opacity-60 text-yellow-400">
+                <div className="mt-1.5 sm:mt-2 text-xs opacity-60 text-yellow-400">
                   Nenhuma cidade configurada para este estado
                 </div>
               )}
               {cidadesDisponiveis.length > 0 && (
-                <div className="mt-2">
+                <div className="mt-1.5 sm:mt-2">
                   <span className="opacity-70 text-xs">Cidades cobertas:</span>
-                  <div className="text-xs opacity-80 mt-1 max-h-20 overflow-y-auto">
-                    {cidadesDisponiveis.slice(0, 8).join(', ')}
-                    {cidadesDisponiveis.length > 8 && (
-                      ` e mais ${cidadesDisponiveis.length - 8} ${cidadesDisponiveis.length - 8 === 1 ? 'cidade' : 'cidades'}`
+                  <div className="text-xs opacity-80 mt-1 max-h-16 sm:max-h-20 overflow-y-auto">
+                    {cidadesDisponiveis.slice(0, 6).join(', ')}
+                    {cidadesDisponiveis.length > 6 && (
+                      ` e mais ${cidadesDisponiveis.length - 6} ${cidadesDisponiveis.length - 6 === 1 ? 'cidade' : 'cidades'}`
                     )}
                   </div>
                 </div>
@@ -472,15 +481,15 @@ const Index = () => {
 
         {/* Sugestão */}
         {suggestion && (
-          <div className={`p-3 border-t ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'}`}>
-            <div className="bg-nd-orange/20 border border-nd-orange/30 rounded-lg p-3">
-              <div className="flex items-start space-x-2">
-                <svg className="w-5 h-5 text-nd-orange mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <div className={`p-3 sm:p-4 border-t ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'}`}>
+            <div className="bg-nd-orange/20 border border-nd-orange/30 rounded-lg p-2 sm:p-3">
+              <div className="flex items-start space-x-1.5 sm:space-x-2">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-nd-orange mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                 </svg>
                 <div>
-                  <div className="font-bold text-nd-orange text-sm">Sugestão:</div>
-                  <div className="font-semibold text-sm">{suggestion.name}</div>
+                  <div className="font-bold text-nd-orange text-xs sm:text-sm">Sugestão:</div>
+                  <div className="font-semibold text-xs sm:text-sm">{suggestion.name}</div>
                   <div className="opacity-80 text-xs">{suggestion.address}</div>
                 </div>
               </div>
@@ -489,9 +498,9 @@ const Index = () => {
         )}
 
         {/* Estatísticas de Cobertura */}
-        <div className={`p-3 border-t ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'}`}>
-          <h4 className="font-semibold text-sm mb-2 flex items-center">
-            <svg className="inline w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+        <div className={`p-3 sm:p-4 border-t ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'}`}>
+          <h4 className="font-semibold text-xs sm:text-sm mb-1.5 sm:mb-2 flex items-center">
+            <svg className="inline w-3 h-3 sm:w-4 sm:h-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
               <path d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"/>
             </svg>
             {mapState.filteredResellers.length === resellers.length 
@@ -501,7 +510,7 @@ const Index = () => {
                 : `Estatísticas Filtradas`
             }
           </h4>
-          <div className="space-y-2 text-sm">
+          <div className="space-y-1 sm:space-y-2 text-xs sm:text-sm">
             <div className="flex justify-between">
               <span className="opacity-70">Total de Unidades:</span>
               <span className="font-semibold">{mapState.filteredResellers.length}</span>
@@ -522,9 +531,9 @@ const Index = () => {
                   : 0}km
               </span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-start">
               <span className="opacity-70">Estados Atendidos:</span>
-              <span className="font-semibold text-xs">
+              <span className="font-semibold text-xs text-right max-w-[50%]">
                 {mapState.filteredResellers.length > 0 
                   ? [...new Set(mapState.filteredResellers.map(r => r.address.split(',').pop()?.trim()))].filter(Boolean).join(', ')
                   : 'Nenhum'}
@@ -534,9 +543,9 @@ const Index = () => {
         </div>
 
         {/* Rodapé da Sidebar */}
-        <div className={`p-3 border-t ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'}`}>
+        <div className={`p-3 sm:p-4 border-t ${darkMode ? 'border-gray-700' : 'border-nd-green-light/30'}`}>
           <div className="text-center opacity-60 text-xs">
-            © 2024 ND Drones<br />
+            © 2025 ND Drones<br />
             Todos os direitos reservados
           </div>
         </div>

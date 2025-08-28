@@ -65,35 +65,11 @@ const NotificationToast = ({ message, type, duration = 5000, onClose }: Notifica
       case 'info':
         return 'bg-orange-500'; // Laranja ND Drones
       default:
-        return 'bg-gray-500';
+        return 'bg-blue-500';
     }
   };
 
-  return (
-    <div
-      className={`fixed top-24 right-4 z-[9999] transform transition-all duration-300 ${
-        isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-      }`}
-    >
-      <div className={`${getBgColor()} text-white px-6 py-4 rounded-xl shadow-2xl max-w-sm border-l-4 border-white/30`}>
-        <div className="flex items-center gap-3">
-          <div className="flex-shrink-0">{getIcon()}</div>
-          <p className="text-sm font-medium flex-1 leading-relaxed">{message}</p>
-          <button
-            onClick={() => {
-              setIsVisible(false);
-              setTimeout(onClose, 300);
-            }}
-            className="ml-2 text-white/80 hover:text-white transition-colors flex-shrink-0"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  return null;
 };
 
 export default NotificationToast;
